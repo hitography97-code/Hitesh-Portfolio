@@ -1,7 +1,7 @@
 :root {
-    --bg: #0d0907;
-    --panel: #120d0b;
-    --panel-2: #17110f;
+    --bg: #000000;
+    --panel: #0b0b0b;
+    --panel-2: #111111;
     --text: #fff4ec;
     --muted: #d7bca5;
     --line: rgba(255, 196, 146, .14);
@@ -25,12 +25,7 @@ html {
 
 body {
     font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    background:
-        linear-gradient(135deg, rgba(255, 107, 61, .08), transparent 38%, rgba(255, 159, 90, .06)),
-        radial-gradient(circle at 15% 20%, rgba(255, 159, 90, .18), transparent 18%),
-        radial-gradient(circle at 80% 12%, rgba(255, 107, 61, .16), transparent 22%),
-        radial-gradient(circle at 50% 70%, rgba(255, 190, 120, .08), transparent 24%),
-        var(--bg);
+    background: var(--bg);
     color: var(--text);
     line-height: 1.6;
     overflow-x: hidden;
@@ -38,31 +33,11 @@ body {
 }
 
 body:before {
-    content: "";
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    opacity: .18;
-    background-image:
-        linear-gradient(rgba(255, 159, 90, .06) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255, 159, 90, .06) 1px, transparent 1px);
-    background-size: 48px 48px;
-    mask-image: linear-gradient(to bottom, black, transparent 85%);
-    z-index: -2;
+    display: none;
 }
 
 body:after {
-    content: "";
-    position: fixed;
-    inset: -15% -10% auto auto;
-    width: 520px;
-    height: 520px;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(255, 159, 90, .22), rgba(255, 107, 61, .08) 30%, transparent 70%);
-    filter: blur(40px);
-    pointer-events: none;
-    z-index: -3;
-    animation: drift 18s ease-in-out infinite alternate;
+    display: none;
 }
 
 a {
@@ -323,6 +298,112 @@ img {
     display: grid;
     place-items: center;
     position: relative;
+}
+
+.device-frame {
+    position: absolute;
+    pointer-events: none;
+    border: 1px solid rgba(255, 159, 90, .22);
+    background: linear-gradient(145deg, rgba(255, 159, 90, .08), rgba(255, 255, 255, .015));
+    box-shadow: 0 0 70px rgba(255, 107, 61, .08), inset 0 0 35px rgba(255, 159, 90, .04);
+    opacity: .72;
+}
+
+.device-frame::after {
+    content: "";
+    position: absolute;
+    inset: 9px;
+    border: 1px solid rgba(255, 190, 120, .1);
+}
+
+.device-frame span {
+    position: absolute;
+    z-index: 1;
+    color: rgba(255, 196, 146, .5);
+    font-size: .55rem;
+    letter-spacing: .18em;
+    white-space: nowrap;
+}
+
+.tv-frame {
+    width: 82%;
+    height: 52%;
+    top: 13%;
+    border-radius: 18px;
+    transform: perspective(900px) rotateY(-9deg) rotateX(2deg);
+}
+
+.tv-frame::before,
+.laptop-frame::before {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: -30px;
+    width: 23%;
+    height: 28px;
+    border-right: 1px solid rgba(255, 159, 90, .2);
+    border-bottom: 1px solid rgba(255, 159, 90, .2);
+    transform: translateX(-50%) skewX(-28deg);
+}
+
+.tv-frame span {
+    top: 18px;
+    left: 20px;
+}
+
+.laptop-frame {
+    width: 65%;
+    height: 42%;
+    right: 2%;
+    bottom: 16%;
+    border-radius: 12px;
+    transform: perspective(800px) rotateY(-17deg) rotateX(4deg);
+    animation: deviceFloat 8s ease-in-out infinite;
+}
+
+.laptop-frame::before {
+    bottom: -18px;
+    width: 75%;
+    height: 13px;
+    border: 1px solid rgba(255, 159, 90, .2);
+    border-radius: 0 0 12px 12px;
+    transform: translateX(-50%) perspective(160px) rotateX(-35deg);
+}
+
+.laptop-frame span {
+    right: 16px;
+    bottom: 14px;
+}
+
+.phone-frame {
+    width: 23%;
+    height: 43%;
+    left: 6%;
+    bottom: 12%;
+    border-radius: 22px;
+    transform: rotate(8deg);
+    animation: deviceFloat 7s ease-in-out -2s infinite;
+}
+
+.phone-frame::before {
+    content: "";
+    position: absolute;
+    top: 8px;
+    left: 50%;
+    width: 32%;
+    height: 4px;
+    border-radius: 99px;
+    background: rgba(255, 196, 146, .3);
+    transform: translateX(-50%);
+}
+
+.phone-frame span {
+    top: 50%;
+    left: 50%;
+    color: rgba(255, 159, 90, .7);
+    font-size: 1.2rem;
+    font-weight: 800;
+    transform: translate(-50%, -50%);
 }
 
 .orbit {
@@ -1460,6 +1541,18 @@ textarea.field {
     }
 }
 
+@keyframes deviceFloat {
+
+    0%,
+    100% {
+        translate: 0 0;
+    }
+
+    50% {
+        translate: 0 -10px;
+    }
+}
+
 /* ---------- RESPONSIVE ---------- */
 
 @media(max-width:900px) {
@@ -1544,6 +1637,23 @@ textarea.field {
 
     .hero-visual {
         min-height: 420px
+    }
+
+    .tv-frame {
+        width: 94%;
+        height: 48%;
+    }
+
+    .laptop-frame {
+        width: 72%;
+        height: 36%;
+        right: -2%;
+    }
+
+    .phone-frame {
+        width: 27%;
+        height: 38%;
+        left: 2%;
     }
 
     .profile-core {

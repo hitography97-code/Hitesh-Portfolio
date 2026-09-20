@@ -693,33 +693,53 @@ img {
 /* ---------- EDUCATION ---------- */
 
 .education-grid {
+    position: relative;
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 18px;
+    gap: 30px;
+    padding-top: 12px;
+}
+
+.education-grid::before {
+    content: "";
+    position: absolute;
+    top: 42px;
+    left: 8%;
+    right: 8%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--cyan), var(--purple), transparent);
 }
 
 .education-card {
-    min-height: 230px;
-    padding: 24px 22px;
-    border: 1px solid var(--line);
-    border-radius: 20px;
-    background: linear-gradient(145deg, rgba(255, 255, 255, .05), rgba(255, 255, 255, .015));
-    box-shadow: 0 16px 34px rgba(0, 0, 0, .14);
-    transition: transform .35s var(--ease), border-color .35s ease;
-}
-
-.education-card:hover {
-    transform: translateY(-6px);
-    border-color: rgba(255, 159, 90, .4);
+    position: relative;
+    min-height: 250px;
+    padding: 0 10px;
+    text-align: center;
 }
 
 .edu-year {
-    display: inline-block;
-    margin-bottom: 18px;
+    position: relative;
+    display: block;
+    margin-bottom: 28px;
+    padding-top: 42px;
     color: var(--cyan);
     font-size: .75rem;
     font-weight: 700;
     letter-spacing: .12em;
+}
+
+.edu-year::before {
+    content: "";
+    position: absolute;
+    top: 35px;
+    left: 50%;
+    width: 14px;
+    height: 14px;
+    border: 3px solid var(--bg);
+    border-radius: 50%;
+    background: var(--cyan);
+    box-shadow: 0 0 0 1px var(--cyan), 0 0 18px rgba(255, 159, 90, .5);
+    transform: translate(-50%, -50%);
 }
 
 .education-card h3 {
@@ -738,6 +758,39 @@ img {
     margin-top: 16px;
     color: #fff4ec;
     font-size: .9rem;
+}
+
+@media(max-width:650px) {
+    .education-grid {
+        grid-template-columns: 1fr;
+        gap: 28px;
+        padding: 0 0 0 28px;
+    }
+
+    .education-grid::before {
+        top: 8px;
+        bottom: 8px;
+        left: 7px;
+        right: auto;
+        width: 1px;
+        height: auto;
+    }
+
+    .education-card {
+        min-height: 0;
+        padding: 0;
+        text-align: left;
+    }
+
+    .edu-year {
+        margin-bottom: 12px;
+        padding-top: 0;
+    }
+
+    .edu-year::before {
+        top: 50%;
+        left: -28px;
+    }
 }
 
 /* ---------- SKILLS ---------- */

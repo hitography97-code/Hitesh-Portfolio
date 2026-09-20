@@ -172,10 +172,10 @@ document.addEventListener("DOMContentLoaded", () => {
             if (submitButton) submitButton.disabled = true;
 
             try {
-                const response = await fetch("/api/messages", {
+                const response = await fetch(contactForm.action, {
                     method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ name, email, subject, message })
+                    headers: { Accept: "application/json" },
+                    body: new FormData(contactForm)
                 });
                 const result = await response.json();
 
@@ -205,6 +205,67 @@ document.addEventListener("DOMContentLoaded", () => {
 
         heroVisual.addEventListener("pointerleave", () => {
             orbit.style.transform = "";
+        });
+    }
+
+    const expandableImages = document.querySelectorAll(
+        ".gallery-item img, .mini-photo img, .profile-core img"
+    );
+
+    if (expandableImages.length) {
+        const lightbox = document.createElement("div");
+        lightbox.className = "lightbox";
+        lightbox.setAttribute("aria-hidden", "true");
+        lightbox.innerHTML = `
+            <button class="lightbox-close" type="button" aria-label="Close image">&times;</button>
+            <img class="lightbox-image" alt="">
+        `;
+        document.body.appendChild(lightbox);
+
+        const lightboxImage = lightbox.querySelector(".lightbox-image");
+        const closeLightbox = () => {
+            lightbox.classList.remove("open");
+            lightbox.setAttribute("aria-hidden", "true");
+            document.body.classList.remove("lightbox-open");
+            lightboxImage.removeAttribute("src");
+        };
+
+        expandableImages.forEach((image) => {
+            const trigger = image.closest(".gallery-item, .mini-photo, .profile-core");
+            if (!trigger) return;
+
+            trigger.classList.add("image-trigger");
+            trigger.setAttribute("role", "button");
+            trigger.setAttribute("tabindex", "0");
+            trigger.setAttribute("aria-label", `Open ${image.alt || "image"}`);
+
+            const openLightbox = () => {
+                lightboxImage.src = image.currentSrc || image.src;
+                lightboxImage.alt = image.alt;
+                lightbox.classList.add("open");
+                lightbox.setAttribute("aria-hidden", "false");
+                document.body.classList.add("lightbox-open");
+            };
+
+            trigger.addEventListener("click", openLightbox);
+            trigger.addEventListener("keydown", (event) => {
+                if (event.key === "Enter" || event.key === " ") {
+                    event.preventDefault();
+                    openLightbox();
+                }
+            });
+        });
+
+        lightbox.addEventListener("click", (event) => {
+            if (event.target === lightbox || event.target.classList.contains("lightbox-close")) {
+                closeLightbox();
+            }
+        });
+
+        document.addEventListener("keydown", (event) => {
+            if (event.key === "Escape" && lightbox.classList.contains("open")) {
+                closeLightbox();
+            }
         });
     }
 });
